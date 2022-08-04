@@ -3,6 +3,7 @@ package com.example.domain.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Getter
@@ -10,6 +11,6 @@ import java.time.LocalDate;
 public class Income {
     private String id;
     private String description;
-    private String amount;
+    private BigDecimal amount;
     private LocalDate date;
 }

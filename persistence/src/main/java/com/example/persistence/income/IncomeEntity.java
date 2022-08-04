@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Document("incomes")
@@ -17,8 +18,8 @@ public class IncomeEntity {
     @NotBlank
     private String description;
 
-    @NotBlank
-    private String amount;
+    @NotNull
+    private BigDecimal amount;
 
     @NotNull
     private LocalDate date;
