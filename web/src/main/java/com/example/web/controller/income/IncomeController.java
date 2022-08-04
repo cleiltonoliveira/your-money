@@ -32,10 +32,14 @@ public class IncomeController {
     public ResponseEntity<List<IncomeResponseDto>> findIncomes() {
         return new ResponseEntity<>(incomeFinder.findIncomes().stream().map(this::toDto).collect(Collectors.toList()), HttpStatus.OK);
     }
+    @GetMapping("receitas/{id}")
+    public ResponseEntity<IncomeResponseDto> findById(@PathVariable("id") String id) {
+        return new ResponseEntity<>(toDto(incomeFinder.findById(id)), HttpStatus.OK);
+    }
 
     @PostMapping("receitas")
     public ResponseEntity<IncomeResponseDto> createIncome(@RequestBody @Valid IncomeRequestDto incomeDto) {
-        return new ResponseEntity<>(toDto(incomeCreator.create(toDomain(incomeDto))), HttpStatus.OK);
+        return new ResponseEntity<>(toDto(incomeCreator.create(toDomain(incomeDto))), HttpStatus.CREATED);
     }
 
     private Income toDomain(IncomeRequestDto dto) {

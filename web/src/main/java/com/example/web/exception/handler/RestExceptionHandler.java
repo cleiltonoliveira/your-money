@@ -2,6 +2,7 @@ package com.example.web.exception.handler;
 
 import com.example.usecases.exception.BadRequestException;
 import com.example.usecases.exception.ResourceConflictException;
+import com.example.usecases.exception.ResourceNotFoundException;
 import com.example.web.exception.ErrorDetailsResponse;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,6 +39,16 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         var errorDetails = buildErrorDetails(
                 "Bad request",
                 HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.valueOf(errorDetails.getHttpStatusCode()));
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> handleBadRequestException(ResourceNotFoundException exception, WebRequest request) {
+        var errorDetails = buildErrorDetails(
+                "Resource not found",
+                HttpStatus.NOT_FOUND.value(),
                 exception.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.valueOf(errorDetails.getHttpStatusCode()));
