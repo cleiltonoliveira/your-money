@@ -15,4 +15,10 @@ public interface IncomeAdapter {
     boolean existsByDescriptionAndDate(String description, LocalDate fromDate, LocalDate toDate);
 
     Optional<Income> findById(String id);
+
+    Optional<Income> findByDescriptionAndDate(String description, LocalDate fromDate, LocalDate toDate);
+
+    boolean existsById(String id);
+
+    void deleteById(String id);
 }

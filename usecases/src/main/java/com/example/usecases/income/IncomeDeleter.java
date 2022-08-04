@@ -9,11 +9,11 @@ import javax.inject.Named;
 import java.util.List;
 
 @Named
-public class IncomeFinder {
+public class IncomeDeleter {
     private final IncomeAdapter incomeAdapter;
 
     @Inject
-    public IncomeFinder(IncomeAdapter incomeAdapter) {
+    public IncomeDeleter(IncomeAdapter incomeAdapter) {
         this.incomeAdapter = incomeAdapter;
     }
 
@@ -21,11 +21,7 @@ public class IncomeFinder {
         return  incomeAdapter.findAll();
     }
 
-    public Income findById(String id) {
-        return incomeAdapter.findById(id).orElseThrow(()-> new ResourceNotFoundException("Resource not found"));
-    }
-
-    public boolean existsById(String id) {
-        return  incomeAdapter.existsById(id);
+    public void delete(String id) {
+        incomeAdapter.deleteById(id);
     }
 }

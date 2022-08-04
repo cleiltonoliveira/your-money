@@ -42,6 +42,21 @@ public class IncomeGateway implements IncomeAdapter {
         return repository.findById(id).map(this::toDomain);
     }
 
+    @Override
+    public Optional<Income> findByDescriptionAndDate(String description, LocalDate fromDate, LocalDate toDate) {
+        return repository.findByDescriptionAndDateIsBetween(description, fromDate, toDate).map(this::toDomain);
+    }
+
+    @Override
+    public boolean existsById(String id) {
+        return repository.existsById(id);
+    }
+
+    @Override
+    public void deleteById(String id) {
+        repository.deleteById(id);
+    }
+
     private Income toDomain(IncomeEntity incomeEntity) {
         return modelMapper.map(incomeEntity, Income.class);
     }
