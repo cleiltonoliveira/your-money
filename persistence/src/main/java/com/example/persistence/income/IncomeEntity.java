@@ -4,10 +4,9 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Document("incomes")
 @Data
@@ -18,10 +17,9 @@ public class IncomeEntity {
     @NotBlank
     private String description;
 
-    @Email
     @NotBlank
     private String amount;
 
     @NotNull
-    private LocalDateTime date;
+    private LocalDate date;
 }

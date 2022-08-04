@@ -1,5 +1,6 @@
 package com.example.web.exception.handler;
 
+import com.example.usecases.exception.BadRequestException;
 import com.example.usecases.exception.ResourceConflictException;
 import com.example.web.exception.ErrorDetailsResponse;
 import org.springframework.http.HttpHeaders;
@@ -32,6 +33,15 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorDetails, HttpStatus.valueOf(errorDetails.getHttpStatusCode()));
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<?> handleBadRequestException(BadRequestException exception, WebRequest request) {
+        var errorDetails = buildErrorDetails(
+                "Bad request",
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.valueOf(errorDetails.getHttpStatusCode()));
+    }
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception, HttpHeaders headers,
@@ -52,10 +62,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException exception, HttpHeaders headers,
                                                                   HttpStatus status, WebRequest request) {
 
-        var message = exception.getCause() != null ? exception.getCause().getMessage() : "";
-
+//        var message = exception.getCause() != null ? exception.getCause().getMessage() : "";
+        var message = "Request payload not readable";
         var errorDetails = buildErrorDetails(
-                "Request payload not readable",
+                message,
                 status.value(),
                 message,
                 request.getDescription(false));
