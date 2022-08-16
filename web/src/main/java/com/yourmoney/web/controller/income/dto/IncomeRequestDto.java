@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class IncomeRequestDto {
-    @NotBlank
+    @NotNull
     private BigDecimal amount;
     @NotBlank
     private String description;

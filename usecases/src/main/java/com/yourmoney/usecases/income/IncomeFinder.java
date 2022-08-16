@@ -28,4 +28,8 @@ public class IncomeFinder {
     public boolean existsById(String id) {
         return  incomeAdapter.existsById(id);
     }
+
+    public List<Income> findIncomesByDescription(String description) {
+        return  incomeAdapter.findAllByDescriptionContaining(description);
+    }
 }

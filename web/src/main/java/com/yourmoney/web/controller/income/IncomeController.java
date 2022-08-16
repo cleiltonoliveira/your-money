@@ -39,7 +39,9 @@ public class IncomeController {
     }
 
     @GetMapping("receitas")
-    public ResponseEntity<List<IncomeResponseDto>> findIncomes() {
+    public ResponseEntity<List<IncomeResponseDto>> findIncomes(@RequestParam("descricao") String description) {
+        if (description != null)
+            return new ResponseEntity<>(incomeFinder.findIncomesByDescription(description).stream().map(this::toDto).collect(Collectors.toList()), HttpStatus.OK);
         return new ResponseEntity<>(incomeFinder.findIncomes().stream().map(this::toDto).collect(Collectors.toList()), HttpStatus.OK);
     }
 

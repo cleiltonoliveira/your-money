@@ -57,6 +57,12 @@ public class IncomeGateway implements IncomeAdapter {
         repository.deleteById(id);
     }
 
+    @Override
+    public List<Income> findAllByDescriptionContaining(String description) {
+        var result = repository.findAllByDescriptionContainingIgnoreCase(description);
+        return result.stream().map(this::toDomain).collect(Collectors.toList());
+    }
+
     private Income toDomain(IncomeEntity incomeEntity) {
         return modelMapper.map(incomeEntity, Income.class);
     }

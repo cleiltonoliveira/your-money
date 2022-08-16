@@ -21,4 +21,6 @@ public interface IncomeAdapter {
     boolean existsById(String id);
 
     void deleteById(String id);
+
+    List<Income> findAllByDescriptionContaining(String description);
 }
