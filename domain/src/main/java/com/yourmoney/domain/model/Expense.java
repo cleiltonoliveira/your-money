@@ -1,5 +1,6 @@
 package com.yourmoney.domain.model;
 
+import com.yourmoney.domain.model.types.Category;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,4 +14,5 @@ public class Expense {
     private String description;
     private BigDecimal amount;
     private LocalDate date;
+    private Category category;
 }

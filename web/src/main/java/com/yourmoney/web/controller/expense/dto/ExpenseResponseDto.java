@@ -1,5 +1,6 @@
 package com.yourmoney.web.controller.expense.dto;
 
+import com.yourmoney.domain.model.types.Category;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,4 +13,5 @@ public class ExpenseResponseDto {
     private BigDecimal amount;
     private String description;
     private LocalDate date;
+    private Category category;
 }

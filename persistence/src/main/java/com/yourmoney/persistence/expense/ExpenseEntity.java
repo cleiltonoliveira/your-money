@@ -1,5 +1,6 @@
 package com.yourmoney.persistence.expense;
 
+import com.yourmoney.persistence.common.types.Category;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -23,4 +24,7 @@ public class ExpenseEntity {
 
     @NotNull
     private LocalDate date;
+
+    @NotNull
+    private Category category;
 }

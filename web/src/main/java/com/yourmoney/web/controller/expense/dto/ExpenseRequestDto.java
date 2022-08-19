@@ -1,5 +1,6 @@
 package com.yourmoney.web.controller.expense.dto;
 
+import com.yourmoney.domain.model.types.Category;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,4 +18,5 @@ public class ExpenseRequestDto {
     private String description;
     @NotNull
     private LocalDate date;
+    private Category category = Category.OUTRAS;
 }
