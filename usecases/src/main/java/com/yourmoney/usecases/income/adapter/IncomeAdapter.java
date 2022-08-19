@@ -23,4 +23,6 @@ public interface IncomeAdapter {
     void deleteById(String id);
 
     List<Income> findAllByDescriptionContaining(String description);
+
+    List<Income> findByDateBetween(LocalDate startDate, LocalDate endDate);
 }

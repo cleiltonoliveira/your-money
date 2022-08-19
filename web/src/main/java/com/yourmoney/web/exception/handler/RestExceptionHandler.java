@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.validation.ConstraintViolationException;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,15 @@ import java.util.stream.Collectors;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<?> handleConstraintViolationException(ConstraintViolationException exception, WebRequest request) {
+        var errorDetails = buildErrorDetails(
+               "Constraint violation",
+                HttpStatus.BAD_REQUEST.value(),
+                exception.getMessage(),
+                request.getDescription(false));
+        return new ResponseEntity<>(errorDetails, HttpStatus.valueOf(errorDetails.getHttpStatusCode()));
+    }
     @ExceptionHandler(ResourceConflictException.class)
     public ResponseEntity<?> handleResourceConflictException(ResourceConflictException exception, WebRequest request) {
         var errorDetails = buildErrorDetails(

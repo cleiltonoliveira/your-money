@@ -63,6 +63,12 @@ public class IncomeGateway implements IncomeAdapter {
         return result.stream().map(this::toDomain).collect(Collectors.toList());
     }
 
+    @Override
+    public List<Income> findByDateBetween(LocalDate startDate, LocalDate endDate) {
+        var result = repository.findAllByDateBetween(startDate, endDate);
+        return result.stream().map(this::toDomain).collect(Collectors.toList());
+    }
+
     private Income toDomain(IncomeEntity incomeEntity) {
         return modelMapper.map(incomeEntity, Income.class);
     }
