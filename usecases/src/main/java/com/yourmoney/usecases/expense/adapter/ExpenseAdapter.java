@@ -21,4 +21,8 @@ public interface ExpenseAdapter {
     boolean existsById(String id);
 
     void deleteById(String id);
+
+    List<Expense> findAllByDescriptionContaining(String description);
+
+    List<Expense> findByDateBetween(LocalDate startDate, LocalDate endDate);
 }

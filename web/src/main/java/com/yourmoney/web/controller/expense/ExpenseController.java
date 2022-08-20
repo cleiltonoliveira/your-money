@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,13 +41,20 @@ public class ExpenseController {
     }
 
     @GetMapping("despesas")
-    public ResponseEntity<List<ExpenseResponseDto>> findExpenses() {
+    public ResponseEntity<List<ExpenseResponseDto>> findExpenses(@RequestParam("descricao") String description) {
+        if (description != null)
+            return new ResponseEntity<>(expenseFinder.findExpensesByDescription(description).stream().map(this::toDto).collect(Collectors.toList()), HttpStatus.OK);
         return new ResponseEntity<>(expenseFinder.findExpenses().stream().map(this::toDto).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @GetMapping("despesas/{id}")
     public ResponseEntity<ExpenseResponseDto> findById(@PathVariable("id") String id) {
         return new ResponseEntity<>(toDto(expenseFinder.findById(id)), HttpStatus.OK);
+    }
+
+    @GetMapping("despesas/{year}/{month}")
+    public ResponseEntity<List<ExpenseResponseDto>> findByYearMonth(@PathVariable("year") int year, @PathVariable("month") @Min(value = 1, message = "Invalid month") @Max(value = 12, message = "Invalid month") int month) {
+        return new ResponseEntity<>(expenseFinder.findByYearMonth(year, month).stream().map(this::toDto).collect(Collectors.toList()), HttpStatus.OK);
     }
 
     @PostMapping("despesas")

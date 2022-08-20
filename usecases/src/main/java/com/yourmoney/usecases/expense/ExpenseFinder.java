@@ -6,6 +6,7 @@ import com.yourmoney.usecases.expense.adapter.ExpenseAdapter;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.time.LocalDate;
 import java.util.List;
 
 @Named
@@ -27,5 +28,15 @@ public class ExpenseFinder {
 
     public boolean existsById(String id) {
         return expenseAdapter.existsById(id);
+    }
+
+    public List<Expense> findExpensesByDescription(String description) {
+        return expenseAdapter.findAllByDescriptionContaining(description);
+    }
+
+    public List<Expense> findByYearMonth(int year, int month) {
+        var fromDate = LocalDate.of(year, month, 1);
+        var toDate = LocalDate.of(year, month, fromDate.lengthOfMonth());
+        return expenseAdapter.findByDateBetween(fromDate, toDate);
     }
 }

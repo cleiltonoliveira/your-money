@@ -57,6 +57,18 @@ public class ExpenseGateway implements ExpenseAdapter {
         repository.deleteById(id);
     }
 
+    @Override
+    public List<Expense> findAllByDescriptionContaining(String description) {
+        var result = repository.findAllByDescriptionContainingIgnoreCase(description);
+        return result.stream().map(this::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Expense> findByDateBetween(LocalDate startDate, LocalDate endDate) {
+        var result = repository.findAllByDateBetween(startDate, endDate);
+        return result.stream().map(this::toDomain).collect(Collectors.toList());
+    }
+
     private Expense toDomain(ExpenseEntity expenseEntity) {
         return modelMapper.map(expenseEntity, Expense.class);
     }
