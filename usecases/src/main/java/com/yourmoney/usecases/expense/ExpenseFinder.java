@@ -6,8 +6,10 @@ import com.yourmoney.usecases.expense.adapter.ExpenseAdapter;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Named
 public class ExpenseFinder {
@@ -38,5 +40,11 @@ public class ExpenseFinder {
         var fromDate = LocalDate.of(year, month, 1);
         var toDate = LocalDate.of(year, month, fromDate.lengthOfMonth());
         return expenseAdapter.findByDateBetween(fromDate, toDate);
+    }
+
+    public Map<String, BigDecimal> getMonthExpenseResume(int year, int month) {
+        var fromDate = LocalDate.of(year, month, 1);
+        var toDate = LocalDate.of(year, month, fromDate.lengthOfMonth());
+        return expenseAdapter.findMonthExpenseResume(fromDate, toDate);
     }
 }

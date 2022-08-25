@@ -6,6 +6,7 @@ import com.yourmoney.usecases.income.adapter.IncomeAdapter;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -38,5 +39,12 @@ public class IncomeFinder {
         var fromDate = LocalDate.of(year, month, 1);
         var toDate = LocalDate.of(year, month, fromDate.lengthOfMonth());
         return incomeAdapter.findByDateBetween(fromDate, toDate);
+    }
+
+    public BigDecimal getMonthIncomeAmount(int year, int month) {
+
+        var fromDate = LocalDate.of(year, month, 1);
+        var toDate = LocalDate.of(year, month, fromDate.lengthOfMonth());
+        return incomeAdapter.findMonthIncomeAmount(fromDate, toDate);
     }
 }

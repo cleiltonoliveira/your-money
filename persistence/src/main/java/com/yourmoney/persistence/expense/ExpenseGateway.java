@@ -2,11 +2,14 @@ package com.yourmoney.persistence.expense;
 
 import com.yourmoney.domain.model.Expense;
 import com.yourmoney.usecases.expense.adapter.ExpenseAdapter;
+import org.bson.types.Decimal128;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -67,6 +70,17 @@ public class ExpenseGateway implements ExpenseAdapter {
     public List<Expense> findByDateBetween(LocalDate startDate, LocalDate endDate) {
         var result = repository.findAllByDateBetween(startDate, endDate);
         return result.stream().map(this::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, BigDecimal> findMonthExpenseResume(LocalDate startDate, LocalDate endDate) {
+
+        var results = repository.findMonthExpenseResume(startDate, endDate);
+
+        var resume = results.getMappedResults().stream()
+                .collect(Collectors.toMap(value -> value.getString("_id"), value -> value.get("total", Decimal128.class).bigDecimalValue()));
+
+        return resume;
     }
 
     private Expense toDomain(ExpenseEntity expenseEntity) {

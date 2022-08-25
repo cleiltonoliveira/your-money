@@ -5,6 +5,7 @@ import com.yourmoney.usecases.income.adapter.IncomeAdapter;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +35,7 @@ public class IncomeGateway implements IncomeAdapter {
 
     @Override
     public boolean existsByDescriptionAndDate(String description, LocalDate fromDate, LocalDate toDate) {
-        return repository.existsByDescriptionAndDateIsBetween(description, fromDate, toDate);
+        return repository.existsByDescriptionAndDateBetween(description, fromDate, toDate);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class IncomeGateway implements IncomeAdapter {
 
     @Override
     public Optional<Income> findByDescriptionAndDate(String description, LocalDate fromDate, LocalDate toDate) {
-        return repository.findByDescriptionAndDateIsBetween(description, fromDate, toDate).map(this::toDomain);
+        return repository.findByDescriptionAndDateIsGreaterThanEqualAndDateIsLessThanEqual(description, fromDate, toDate).map(this::toDomain);
     }
 
     @Override
@@ -67,6 +68,12 @@ public class IncomeGateway implements IncomeAdapter {
     public List<Income> findByDateBetween(LocalDate startDate, LocalDate endDate) {
         var result = repository.findAllByDateBetween(startDate, endDate);
         return result.stream().map(this::toDomain).collect(Collectors.toList());
+    }
+
+    @Override
+    public BigDecimal findMonthIncomeAmount(LocalDate startDate, LocalDate endDate) {
+        var amount = repository.findMonthIncomeAmount(startDate, endDate);
+        return amount.bigDecimalValue();
     }
 
     private Income toDomain(IncomeEntity incomeEntity) {

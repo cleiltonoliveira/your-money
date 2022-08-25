@@ -2,8 +2,10 @@ package com.yourmoney.usecases.expense.adapter;
 
 import com.yourmoney.domain.model.Expense;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface ExpenseAdapter {
@@ -25,4 +27,6 @@ public interface ExpenseAdapter {
     List<Expense> findAllByDescriptionContaining(String description);
 
     List<Expense> findByDateBetween(LocalDate startDate, LocalDate endDate);
+
+    Map<String, BigDecimal> findMonthExpenseResume(LocalDate startDate, LocalDate endDate);
 }
