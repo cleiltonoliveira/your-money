@@ -45,7 +45,7 @@ public class IncomeGateway implements IncomeAdapter {
 
     @Override
     public Optional<Income> findByDescriptionAndDate(String description, LocalDate fromDate, LocalDate toDate) {
-        return repository.findByDescriptionAndDateIsGreaterThanEqualAndDateIsLessThanEqual(description, fromDate, toDate).map(this::toDomain);
+        return repository.findByDescriptionAndDateBetween(description, fromDate, toDate).map(this::toDomain);
     }
 
     @Override

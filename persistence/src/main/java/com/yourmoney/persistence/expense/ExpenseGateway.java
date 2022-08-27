@@ -37,7 +37,7 @@ public class ExpenseGateway implements ExpenseAdapter {
 
     @Override
     public boolean existsByDescriptionAndDate(String description, LocalDate fromDate, LocalDate toDate) {
-        return repository.existsByDescriptionAndDateIsBetween(description, fromDate, toDate);
+        return repository.existsByDescriptionAndDateBetween(description, fromDate, toDate);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class ExpenseGateway implements ExpenseAdapter {
 
     @Override
     public Optional<Expense> findByDescriptionAndDate(String description, LocalDate fromDate, LocalDate toDate) {
-        return repository.findByDescriptionAndDateIsBetween(description, fromDate, toDate).map(this::toDomain);
+        return repository.findByDescriptionAndDateBetween(description, fromDate, toDate).map(this::toDomain);
     }
 
     @Override

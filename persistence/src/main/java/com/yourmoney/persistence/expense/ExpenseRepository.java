@@ -12,9 +12,12 @@ import java.util.Optional;
 
 public interface ExpenseRepository extends MongoRepository<ExpenseEntity, String> {
 
-    boolean existsByDescriptionAndDateIsBetween(String description, LocalDate startDate, LocalDate endDate);
+    @Query(value = "{'description' : ?0, 'date' : { $gte: ?1, $lte: ?2 } }", exists = true)
+    boolean existsByDescriptionAndDateBetween(String description, LocalDate startDate, LocalDate endDate);
 
-    Optional<ExpenseEntity> findByDescriptionAndDateIsBetween(String description, LocalDate fromDate, LocalDate toDate);
+    @Query(value = "{'description' : ?0, 'date' : { $gte: ?1, $lte: ?2 } }")
+
+    Optional<ExpenseEntity> findByDescriptionAndDateBetween(String description, LocalDate fromDate, LocalDate toDate);
 
     List<ExpenseEntity> findAllByDescriptionContainingIgnoreCase(String description);
 
