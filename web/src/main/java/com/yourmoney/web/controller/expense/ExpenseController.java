@@ -41,7 +41,7 @@ public class ExpenseController {
     }
 
     @GetMapping("despesas")
-    public ResponseEntity<List<ExpenseResponseDto>> findExpenses(@RequestParam("descricao") String description) {
+    public ResponseEntity<List<ExpenseResponseDto>> findExpenses(@RequestParam(value = "descricao", required = false) String description) {
         if (description != null)
             return new ResponseEntity<>(expenseFinder.findExpensesByDescription(description).stream().map(this::toDto).collect(Collectors.toList()), HttpStatus.OK);
         return new ResponseEntity<>(expenseFinder.findExpenses().stream().map(this::toDto).collect(Collectors.toList()), HttpStatus.OK);

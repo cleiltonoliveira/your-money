@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -47,5 +48,80 @@ public class ExpenseControllerTest extends MongoDBTestContainerConfig {
                 .andExpect(jsonPath("$.amount").value(model.getAmount()))
                 .andExpect(jsonPath("$.date").value(model.getDate().toString()))
                 .andDo(result -> log.info("RESPONSE PAYLOAD "+result.getResponse().getContentAsString()));
+    }
+
+    @Test
+    @DisplayName("update should be success and return status code 201")
+    public void updateShouldReturnStatusCode204() throws Exception {
+        var model = buildRequestModel();
+        mockMvc.perform(post("/api/v1/despesas")
+                        .content(JsonHelper.asJsonString(model))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.description").value(model.getDescription()))
+                .andExpect(jsonPath("$.amount").value(model.getAmount()))
+                .andExpect(jsonPath("$.date").value(model.getDate().toString()))
+                .andDo(result -> log.info("RESPONSE PAYLOAD "+result.getResponse().getContentAsString()));
+    }
+
+    @Test
+    @DisplayName("find expenses by description should be success and return status code 200 and body")
+    public void findExpensesByDescriptionShouldReturnStatusCode200AndBody() throws Exception {
+        var model = buildRequestModel();
+
+        var desc1 = "This just a mock description 1";
+        var desc2 = "This just a mock description 2";
+
+        model.setDescription(desc1);
+        mockMvc.perform(post("/api/v1/despesas")
+                        .content(JsonHelper.asJsonString(model))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        model.setDescription(desc2);
+
+        mockMvc.perform(post("/api/v1/despesas")
+                        .content(JsonHelper.asJsonString(model))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        var queryDescription = "mock description 1";
+
+        mockMvc.perform(get("/api/v1/despesas").param("descricao", queryDescription ))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.[0].description").value(desc1))
+                .andExpect(jsonPath("$.size()").value(1));
+    }
+
+    @Test
+    @DisplayName("find expenses should be success and return status code 200 and body")
+    public void findExpensesShouldReturnStatusCode200AndBody() throws Exception {
+        var model = buildRequestModel();
+
+        mockMvc.perform(post("/api/v1/despesas")
+                        .content(JsonHelper.asJsonString(model))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/v1/despesas"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray())
+                .andExpect(jsonPath("$.size()").value(1));
+    }
+
+    @Test
+    @DisplayName("findByYearMonth should be success and return status code 200 and body")
+    public void findByYearMonthShouldReturnStatusCode200AndBody() throws Exception {
+        var model = buildRequestModel();
+
+        mockMvc.perform(post("/api/v1/despesas")
+                        .content(JsonHelper.asJsonString(model))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+        mockMvc.perform(get("/api/v1/despesas/2022/08"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.*").isArray());
     }
 }
