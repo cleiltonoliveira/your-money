@@ -1,9 +1,9 @@
 package com.yourmoney.web.controller.income;
 
 import com.yourmoney.domain.model.Income;
+import com.yourmoney.usecases.income.IncomeCreator;
 import com.yourmoney.usecases.income.IncomeDeleter;
 import com.yourmoney.usecases.income.IncomeFinder;
-import com.yourmoney.usecases.income.IncomeCreator;
 import com.yourmoney.usecases.income.IncomeUpdater;
 import com.yourmoney.web.controller.income.dto.IncomeRequestDto;
 import com.yourmoney.web.controller.income.dto.IncomeResponseDto;
@@ -43,7 +43,7 @@ public class IncomeController {
     }
 
     @GetMapping("receitas")
-    public ResponseEntity<List<IncomeResponseDto>> findIncomes(@RequestParam("descricao") String description) {
+    public ResponseEntity<List<IncomeResponseDto>> findIncomes(@RequestParam(value = "descricao", required = false) String description) {
         if (description != null)
             return new ResponseEntity<>(incomeFinder.findIncomesByDescription(description).stream().map(this::toDto).collect(Collectors.toList()), HttpStatus.OK);
         return new ResponseEntity<>(incomeFinder.findIncomes().stream().map(this::toDto).collect(Collectors.toList()), HttpStatus.OK);
