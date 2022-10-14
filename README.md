@@ -20,193 +20,132 @@ The project has the following modules:
 
 <img src="assets/diagram-arch.png" alt="Architecture" width="500" height="500"/>
 
-## Documentação da API
+## API Documentation
 
-### Receita
-#### Retorna uma lista paginada das receitas cadastradas.
+### Incomes
 
-```http
-  GET /receitas
 ```
-
-| Parâmetros (Opcionais)   | Tipo       | Descrição                           |
-| :---------- | :--------- | :---------------------------------- |
-| `page` | `Integer` | **Opcional**. Define qual página será exibida. |
-| `linesPerPage` | `Integer` | **Opcional**. Define quantos registros serão exibidos. |
-| `direction` | `String` | **Opcional**. Define se teremos uma ordenação ASC ou DESC. |
-| `orderBy` | `String` | **Opcional**. Define campo usado para ordenação. |
-
-#
-#### Retorna uma receita de acordo com o ID informado.
-
-```http
-  GET /receitas/${id}
+POST /receitas - Create an income.
 ```
-
-| Parâmetro   | Tipo       | Descrição                                   |
-| :---------- | :--------- | :------------------------------------------ |
-| `id`      | `long` | **Obrigatório**. O ID do item que você quer. |
-
-#
-#### Adiciona uma nova receita
-
-```http
-  POST /receitas
-```
-
-| Parâmetro   | Tipo        | Descrição                                   |
-| :---------- | :---------  | :------------------------------------------ |
-| `data`      | `LocalDate` | **Obrigatório**. Informa a data da receita. |
-| `descricao` | `String`    | **Obrigatório**. Informa o tipo da receita. |
-| `valor`     | `BigDecimal`| **Obrigatório**. Informa o valor da receita.|
-
-**Body**
+#### Request payload
 ```json
 {
-    "data" : "2022-07-10T08:30:00Z",
-    "descricao" : "Pix aniversário",
-    "valor" : 170.0
+  "amount": 1002,
+  "description": "Donation",
+  "date": "2022-09-03"
 }
 ```
-**Return - Status 201 Created**
+#### Response 201
 ```json
 {
-    "id": 3,
-    "descricao": "Pix aniversário",
-    "valor": 170.0,
-    "data": "2022-07-10"
+  "amount": 1002,
+  "description": "Donation",
+  "date": "2022-09-03"
 }
+```   
+
+#
+```
+GET /receitas?descrition - List all incomes found.
+```
+| Parameter   | Type       | Required  | Description                  |
+| :---------- | :--------- |-----------|:-----------------------------|
+| `descricao` | `String` | **false** | Income description to search |
+
+
+#### Response 200
+```json
+[
+  {
+    "amount": 1002,
+    "description": "Donation",
+    "date": "2022-09-03"
+  },
+  {
+    "amount": 5000,
+    "description": "Donation 2",
+    "date": "2022-08-01"
+  }
+]
 ```
 #
-```http
-  PUT /receitas/${id}
 ```
-
-| Parâmetro   | Tipo        | Descrição                                   |
-| :---------- | :---------  | :------------------------------------------ |
-| `data`      | `LocalDate` | **Obrigatório**. Informa a data da receita. |
-| `descricao` | `String`    | **Obrigatório**. Informa o tipo da receita. |
-| `valor`     | `BigDecimal`| **Obrigatório**. Informa o valor da receita.|
-
-**Body**
-```json
-{
-    "data" : "2022-07-10T08:30:00Z",
-    "descricao" : "Pix aniversário",
-    "valor" : 200.0
-}
+GET /receitas/${id} - Get the income from the given ID
 ```
-**Return - Status 200 OK**
+| Parameter | Type       | Required | Description |
+|:----------| :--------- |----------|:------------|
+| `id`      | `String` | **true** | Income ID   |
+
+#### Response 200
 ```json
-{
-    "id": 3,
-    "descricao": "Pix aniversário",
-    "valor": 200.0,
-    "data": "2022-07-10"
-}
+  {
+    "amount": 1002,
+    "description": "Donation",
+    "date": "2022-09-03"
+  }
 ```
 #
-```http
-  DELETE /receitas/${id}
+```
+GET /receitas/{year}/{month} - List all incomes found in the given month.
+```
+| Parameter | Type      | Required | Description         |
+|:----------|:----------|----------|:--------------------|
+| `year`    | `Integer` | **true** | Year of the income  |
+| `month`   | `Integer` | **true** | Month of the income |
+
+
+#### Response 200
+```json
+[
+  {
+    "amount": 1002,
+    "description": "Donation",
+    "date": "2022-09-03"
+  },
+  {
+    "amount": 5000,
+    "description": "Donation 2",
+    "date": "2022-08-01"
+  }
+]
 ```
 
-| Parâmetro   | Tipo       | Descrição                                   |
-| :---------- | :--------- | :------------------------------------------ |
-| `id`      | `long` | **Obrigatório**. O ID do item que você deseja deletar. 
+
+#
+```
+  PUT /receitas/${id} - Update an income
+```
+| Parameter | Type       | Required | Description |
+|:----------| :--------- |----------|:------------|
+| `id`      | `String` | **true** | Income ID   |
+
+#### Request payload
+```json
+  {
+    "amount": 50,
+    "description": "Donation",
+    "date": "2022-09-03"
+  }
+```
+
+#### Response 200
+```json
+  {
+    "amount": 50,
+    "description": "Donation",
+    "date": "2022-09-03"
+  }
+```
+
+
+#
+
+```
+DELETE /receitas/${id} - Delete an income
+```
+| Parameter | Type       | Required | Description |
+|:----------| :--------- |----------|:------------|
+| `id`      | `String` | **true** | Income ID   |
 
 **Return - Status 204 No Content**
 #
-
-### Despesa
-#### Retorna uma lista paginada das despesas cadastradas.
-
-```http
-  GET /despesas
-```
-
-| Parâmetros (Opcionais)   | Tipo       | Descrição                           |
-| :---------- | :--------- | :---------------------------------- |
-| `page` | `Integer` | **Opcional**. Define qual página será exibida. |
-| `linesPerPage` | `Integer` | **Opcional**. Define quantos registros serão exibidos. |
-| `direction` | `String` | **Opcional**. Define se teremos uma ordenação ASC ou DESC. |
-| `orderBy` | `String` | **Opcional**. Define campo usado para ordenação. |
-
-#
-#### Retorna uma despesa de acordo com o ID informado.
-
-```http
-  GET /despesas/${id}
-```
-
-| Parâmetro   | Tipo       | Descrição                                   |
-| :---------- | :--------- | :------------------------------------------ |
-| `id`      | `long` | **Obrigatório**. O ID do item que você quer. |
-
-#
-#### Adiciona uma nova despesa
-
-```http
-  POST /despeas
-```
-
-| Parâmetro   | Tipo        | Descrição                                   |
-| :---------- | :---------  | :------------------------------------------ |
-| `data`      | `LocalDate` | **Obrigatório**. Informa a data da despesa. |
-| `descricao` | `String`    | **Obrigatório**. Informa o tipo da despesa. |
-| `valor`     | `BigDecimal`| **Obrigatório**. Informa o valor da despesa.|
-
-**Body**
-```json
-{
-    "data" : "2022-07-10T08:30:00Z",
-    "descricao" : "Pizza",
-    "valor" : 60.0
-}
-```
-**Return - Status 201 Created**
-```json
-{
-    "id": 5,
-    "descricao": "Pizza",
-    "valor": 60.0,
-    "data": "2022-07-10"
-}
-```
-#
-```http
-  PUT /despesas/${id}
-```
-
-| Parâmetro   | Tipo        | Descrição                                   |
-| :---------- | :---------  | :------------------------------------------ |
-| `data`      | `LocalDate` | **Obrigatório**. Informa a data da despesa. |
-| `descricao` | `String`    | **Obrigatório**. Informa o tipo da despesa. |
-| `valor`     | `BigDecimal`| **Obrigatório**. Informa o valor da despesa.|
-
-**Body**
-```json
-{
-    "data" : "2022-07-10T08:30:00Z",
-    "descricao" : "Pizza",
-    "valor" : 70.0
-}
-```
-**Return - Status 200 OK**
-```json
-{
-    "id": 5,
-    "descricao": "Pizza",
-    "valor": 70.0,
-    "data": "2022-07-10"
-}
-```
-#
-```http
-  DELETE /despesas/${id}
-```
-
-| Parâmetro   | Tipo       | Descrição                                   |
-| :---------- | :--------- | :------------------------------------------ |
-| `id`      | `long` | **Obrigatório**. O ID do item que você deseja deletar. 
-
-**Return - Status 204 No Content**
